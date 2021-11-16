@@ -1,0 +1,24 @@
+In api client: http://localhost:5000/user
+in terminal: $ npm run dev
+
+//CREATE
+
+POST - in api client
+{
+	"username": "JamesAnold",
+	"email": "james@hell.com",
+	"password": "pass1pas"
+}
+
+//READ 
+
+ALL database - in api client
+GET
+
+LOGIN 
+match an email and password{ 
+"email": "andy@emddl.com",
+"password": "tey12dd3"
+}
+
+//DELETE

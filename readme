@@ -1,0 +1,34 @@
+In api client: http://localhost:5000/user
+in terminal: $ npm run dev
+
+//CREATE
+
+POST - In api client: http://localhost:5000/user
+
+{
+	"username": "JamesArnold",
+	"email": "james@hello.com",
+	"password": "pass1pas"
+}
+
+//READ 
+
+1. ALL database - GET in api client: http://localhost:5000/user
+
+2. LOGIN 
+match an email and password{ 
+"email": "andy@emddl.com",
+"password": "tey12dd3"
+}
+
+//UPDATE
+PUT in api client: http://localhost:5000/user/
+function is to update email by typing username:
+{ 
+"username": "Johnny2",
+"email": "john@john.com"
+}
+
+
+//DELETE: http://localhost:5000/user/jack 
+write the username of the person who's record you want to delete in api client. Uses req.params

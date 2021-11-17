@@ -4,7 +4,7 @@ const {
   getUsers,
   logIn,
   deleteUser,
-  updateUsername,
+  updateEmail,
 } = require("./user.controllers"); //pullin in controller.
 const { hashPassword, comparePasswords, tokenAuth } = require("../middleware");
 const userRouter = Router(); // assign to const to access with dotnotation. Name related to concern. Take note of capital R.
@@ -18,15 +18,16 @@ userRouter.post("/user", hashPassword, addUser);
 //compare password
 userRouter.post("/login", comparePasswords, logIn);
 
-//UDPATE - PUT
-userRouter.put("/user", updateUsername);
+//auto log in feature using tokens:
+userRouter.get("/token", logIn, tokenAuth);
 
-userRouter.get("/token", /*token verification middleware*/ logIn, tokenAuth);
+//UDPATE - PUT
+userRouter.put("/user", updateEmail);
 
 //READ -make get request. see readme.
 userRouter.get("/user", getUsers); //getUser controller for read function
 
 //DELETE
-userRouter.delete("/user", deleteUser);
+userRouter.delete("/user/:username", deleteUser); //anythign after user is consider req.params.username colon variable name is express parameter.
 
 module.exports = userRouter;

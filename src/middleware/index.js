@@ -46,6 +46,9 @@ exports.tokenAuth = async (req, res, next) => {
     const tokenObj = jwt.verify(noBearerToken, process.env.SECRET); //verify and then it decodes the token.
     const user = await User.findOne({ _id: tokenObj._id }); // search data base for particualr user.
     req.user = user; //calls it..?
+    if (!req.user) {
+      throw new Error();
+    }
     next();
   } catch (error) {
     console.log(error);

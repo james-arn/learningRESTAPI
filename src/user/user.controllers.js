@@ -23,7 +23,8 @@ exports.addUser = async (req, res) => {
 //READ - login.
 exports.logIn = async (req, res) => {
   try {
-    res.status(200).send(req.user); //finding a user and sending it back. easy.
+    const token = await req.user.generateAuthToken(); // this gets token to retrieve infoon user.
+    res.status(200).send({ user: req.user, token }); //finding a user and sending it back. easy.
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Check server logs" });
@@ -44,15 +45,16 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-//UPDATE
-exports.updateUsername = async (req, res, next) => {
+//UPDATE - put accepts .body
+exports.updateEmail = async (req, res) => {
   try {
     await User.findOneAndUpdate(
-      { username: req.params.username },
-      { username: req.params.username }
+      { username: req.body.username },
+      { email: req.body.email }
     );
+    console.log({ username: req.body.username }, { email: req.body.email });
     console.log("Username updated.");
-    res.status(200).send({ message: "success" }); // needed or will tiem out. Got to send it.
+    res.status(200).send({ message: "Success" }); // needed or will tiem out. Got to send it.
   } catch (error) {
     console.log(error);
     res
@@ -61,13 +63,12 @@ exports.updateUsername = async (req, res, next) => {
   }
 };
 
-//DELETE - uses delete (does not accept .body - params)
-exports.deleteUser = async (req, res, next) => {
+//DELETE - uses delete (does not accept .body - accepts .params)
+exports.deleteUser = async (req, res) => {
   try {
-    const userToDelete = req.params.username;
-    await User.findOneAndRemove({ username: userToDelete });
-    res.status(200).send({ message: "success - user deleted from database" }); // needed or will time out.
-    console.log("Deleted from database.");
+    console.log({ username: req.params.username });
+    await User.findOneAndDelete({ username: req.params.username }); //mongoose finds and delete all to do withthat username.
+    res.status(200).send({ message: "success - user deleted from database" }); // needed or will time out. like return statement.
   } catch (error) {
     res.status(500).send({ message: "Check server logs" });
   }

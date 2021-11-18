@@ -1,6 +1,7 @@
 In api client: http://localhost:5000/user
 in terminal: $ npm run dev
 
+**USER**
 //CREATE
 
 POST - In api client: http://localhost:5000/user

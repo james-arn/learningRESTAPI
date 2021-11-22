@@ -5,13 +5,15 @@ const User = require("./user.model"); //model specific methods.
 exports.addUser = async (req, res) => {
   try {
     const newUser = new User(req.body);
+    await newUser.save();
     const token = await newUser.generateAuthToken(); // will now generate token and assign it specificall yto user creater.
     //this replaces all yarg input. wriets json file an dsends to back end.
-    await newUser.save();
     //   console.log(req.body); // need to see what request is (data type e.g. array) so you know how to access what's contained inside.
     //.body above gets rleelavtn info only
     // const newUser = new User()
-    res.status(200).send({ message: "success", newUser, token }); // needed or will tiem out. Got to send it.
+    res
+      .status(200)
+      .send({ message: "success", user: newUser.username, token: token }); // needed or will tiem out. Got to send it.
   } catch (error) {
     console.log(error);
     res
@@ -53,7 +55,7 @@ exports.updateEmail = async (req, res) => {
       { email: req.body.email }
     );
     console.log({ username: req.body.username }, { email: req.body.email });
-    console.log("Username updated.");
+    console.log("email updated.");
     res.status(200).send({ message: "Success" }); // needed or will tiem out. Got to send it.
   } catch (error) {
     console.log(error);

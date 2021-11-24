@@ -5,12 +5,12 @@ const User = require("./user.model"); //model specific methods.
 exports.addUser = async (req, res) => {
   try {
     const newUser = new User(req.body);
-    await newUser.save();
     const token = await newUser.generateAuthToken(); // will now generate token and assign it specificall yto user creater.
     //this replaces all yarg input. wriets json file an dsends to back end.
     //   console.log(req.body); // need to see what request is (data type e.g. array) so you know how to access what's contained inside.
     //.body above gets rleelavtn info only
     // const newUser = new User()
+    await newUser.save();
     res
       .status(200)
       .send({ message: "success", user: newUser.username, token: token }); // needed or will tiem out. Got to send it.
@@ -26,7 +26,8 @@ exports.addUser = async (req, res) => {
 exports.logIn = async (req, res) => {
   try {
     const token = await req.user.generateAuthToken(); // this gets token to retrieve infoon user.
-    res.status(200).send({ user: req.user, token }); //finding a user and sending it back. easy.
+    console.log(token);
+    res.status(200).send({ user: req.user, token: token }); //finding a user and sending it back. easy.
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: "Check server logs" });
@@ -68,7 +69,6 @@ exports.updateEmail = async (req, res) => {
 //DELETE - uses delete (does not accept .body - accepts .params)
 exports.deleteUser = async (req, res) => {
   try {
-    console.log({ username: req.params.username });
     await User.findOneAndDelete({ username: req.params.username }); //mongoose finds and delete all to do withthat username.
     res.status(200).send({ message: "success - user deleted from database" }); // needed or will time out. like return statement.
   } catch (error) {

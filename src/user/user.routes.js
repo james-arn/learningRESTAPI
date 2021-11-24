@@ -19,7 +19,7 @@ userRouter.post("/user", hashPassword, addUser);
 userRouter.post("/login", comparePasswords, logIn);
 
 //auto log in feature using tokens:
-userRouter.get("/token", logIn, tokenAuth);
+userRouter.get("/token", tokenAuth, logIn);
 
 //UDPATE - PUT
 userRouter.put("/user", updateEmail);

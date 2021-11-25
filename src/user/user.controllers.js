@@ -26,7 +26,6 @@ exports.addUser = async (req, res) => {
 exports.logIn = async (req, res) => {
   try {
     const token = await req.user.generateAuthToken(); // this gets token to retrieve infoon user.
-    console.log(token);
     res.status(200).send({ user: req.user, token: token }); //finding a user and sending it back. easy.
   } catch (error) {
     console.log(error);

@@ -19,35 +19,36 @@ exports.hashPassword = async (req, res, next) => {
 
 exports.comparePasswords = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email }); //find one as dont' wantt ot work with array.
-    const comparisonBool = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const user = await User.findOne({ email: req.body.email });
+    // console.log(req.body.email);
+    // console.log(user);
+    const comparisonBool = await bcrypt.compare(req.body.pass, user.password);
+    console.log(comparisonBool);
     if (comparisonBool) {
-      req.user = user; //use dotnation to add user variable to the request object. Bit liek const user in request object.
-      // in the request hter eis now a new key value air. keyis user and value is what we found in database.
-      //if passwords mathc, add to request body and move to next method.
-      next(); // to move on
+      req.user = user;
+      next();
     } else {
-      res.status(500).send({ message: "Incorrect credentials" });
-      //throws generic error to catch block. Now if it says check server logs and we have an empty array, we know it's here
+      throw new Error();
     }
-  } catch (error) {
-    res.status(500).send({ message: "Check server error logs" });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .send({ message: "Check server logs. Error while comparing passwords" });
   }
 };
 
 exports.tokenAuth = async (req, res, next) => {
   try {
-    // recieveing token and need to output a user.
-    const token = req.header("Authorization"); // gives us access to header in api client with dotnotation.
-    const noBearerToken = token.replace("Bearer ", ""); //method to remove berer from string.
-    const tokenObj = jwt.verify(noBearerToken, process.env.SECRET); //verify and then it decodes the token.
-    const user = await User.findOne({ _id: tokenObj._id }); // search data base for particualr user.
-    req.user = user; //calls it..?
+    const token = req.header("Authorization").replace("Bearer ", "");
+    console.log(token);
+    const tokenObj = jwt.verify(token, process.env.SECRET); // verify decondes token
+    console.log(tokenObj);
+    const user = await User.findOne({ _id: tokenObj._id });
+    console.log(user);
+    req.user = user;
     if (!req.user) {
-      throw new Error();
+      throw new Error({ message: "error" });
     }
     next();
   } catch (error) {
